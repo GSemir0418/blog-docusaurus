@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 rm -rf build
-npm run build:gitpage
+npm run build
 cd build
 git init
 git add .
