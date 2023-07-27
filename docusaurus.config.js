@@ -10,6 +10,7 @@ const config = {
   tagline: 'Welcome to my website',
   favicon: 'img/favicon.ico',
 
+  plugins: [require.resolve('docusaurus-lunr-search')],
   // Set the production url of your site here
   // 不用加二级域名
   url: 'https://gsemir0418.github.io',
@@ -60,6 +61,7 @@ const config = {
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Gsemir',
+        hideOnScroll: true,
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
