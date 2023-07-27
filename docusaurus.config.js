@@ -45,11 +45,17 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/GSemir0418/blog-docusaurus/tree/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        blog: {
+          // 首页展示全部 blog
+          postsPerPage: 'ALL',
+          blogSidebarTitle: '全部内容',
+          blogSidebarCount: 'ALL',
+        }
       }),
     ],
   ],
@@ -80,12 +86,13 @@ const config = {
             to: '/projects-page'
           },
           {
-            href: 'https://github.com/GSemir0418',
-            label: 'GitHub',
-            position: 'right',
+            label: '每日X问',
+            position: 'left',
+            to: '/blog'
           },
           {
-            type: 'search',
+            href: 'https://github.com/GSemir0418',
+            label: 'GitHub',
             position: 'right',
           },
         ],
