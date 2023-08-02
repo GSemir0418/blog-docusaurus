@@ -2,13 +2,15 @@
 sidebar-position: 1
 title: Rails 项目总结
 authors: gsemir
+date: 2023-07-11
 tags: [ruby, ruby on rails]
 ---
-# 初始化
 
-## 环境配置
+## 初始化
 
-### macos
+### 环境配置
+
+#### macos
 
 1. 安装 rails 
 
@@ -23,18 +25,17 @@ $ brew services stop postgresql@14
 
 3. 安装必要驱动：`pacman -S postgresql-libs`
 
-### ubuntu(wsl)
+#### ubuntu(wsl)
 
 1. 安装 rvm [rvm/ubuntu_rvm: Ubuntu package for RVM (github.com)](https://github.com/rvm/ubuntu_rvm)
 
 2. 安装 postgresql [PostgreSQL: Linux downloads (Ubuntu)](https://www.postgresql.org/download/linux/ubuntu/)
    
-
 3. 安装必要驱动：`sudo apt-get install libpq-dev`
 
-## 数据库配置
+### 数据库配置
 
-### macos
+#### macos
 
 ```bash
 # 连接postgresql，不指定用户名和数据库默认是当前登陆系统账号同名的用户与数据库
@@ -55,7 +56,7 @@ ALTER ROLE gsemir CREATEDB;
 # 之后就可以使用 gsemir 用户来创建并管理其他数据库了
 ```
 
-### ubuntu(wsl)
+#### ubuntu(wsl)
 
 - 配置同上
 
@@ -71,7 +72,7 @@ ALTER ROLE gsemir CREATEDB;
   - 启动 `sudo service postgresql start`
   - 状态 `sudo service postgresql status`
 
-### docker
+#### docker
 
 ```bash
 docker run -d \
@@ -91,19 +92,19 @@ docker run -d \
 docker run -d --name db-for-rails-todo -e POSTGRES_USER=gsemir -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=rails-todo-dev -e PGDATA=/var/lib/postgresql/data/pgdata -v rails-todo-data:/var/lib/postgresql/data postgres:14
 ```
 
-### 数据库常用命令
+#### 数据库常用命令
 
 - `\c <database_name>` 连接数据库
 - `\l` 列出全部数据库
 - `\dt` 显示全部表格
 
-### IDE
+#### IDE
 
 - 安装vscode扩展 `ckolkman.vscode-postgres`
 
-## 项目初始化
+### 项目初始化
 
-### ruby 配置 
+#### ruby 配置 
 
 1. 安装 ruby：`rvm install ruby-3.0.0`
 
@@ -132,7 +133,7 @@ development:
   port: 5432
 ```
 
-### 创建或运行项目
+#### 创建或运行项目
 
 1. 同步数据库及数据表：`bin/rails db:create db:migrate`
 
@@ -150,7 +151,7 @@ rails new --api --database=postgresql --skip-test todo-backend-rails-1
 
 `bin/rails s` 也行
 
-### rspec 配置
+#### rspec 配置
 
 1. 将 `gem 'rspec-rails', '~>5.0.0'` 复制到 `Gemfile` 中
 
@@ -184,7 +185,7 @@ $ rspec -e "获取当前登录用户"
 $ rspec spec/requests/api/v1/me_spec.rb:5``
 ```
 
-### API 文档配置
+#### API 文档配置
 
 1. Gemfile 使用本地依赖
 
@@ -218,17 +219,17 @@ $ bundle
 
 ---
 
-# API开发
+## API开发
 
-## API 开发主要流程及命令
+### API 开发主要流程及命令
 
-### 设计 table、api
+#### 设计 table、api
 
-### 创建 model
+#### 创建 model
 
 `bin/rails g model <Name> field1:type field2:type`
 
-### 同步数据表
+#### 同步数据表
 
 `bin/rails db:create db:migrate`
 
@@ -242,7 +243,7 @@ $ bundle
 
 `bin/rails db:rollback step=1`
 
-### 创建 controller
+#### 创建 controller
 
 `bin/rails g controller api/v1/<controller_names>`
 
@@ -250,7 +251,7 @@ $ bundle
 
 驼峰和下划线都可, 斜杠也可, 在Rails中，双冒号（::）用于表示命名空间的层级关系，而斜线（/）用于表示路径的层级关系。Rails会将斜线转换为双冒号，并根据命名空间的层级关系创建相应的文件和目录结构。因此，在这两条指令中，最终生成的文件和动作都是相同的。
 
-### TDD
+#### TDD
 
 - 初始化
 
@@ -264,11 +265,11 @@ $ bundle
 
 `touch /spec/acceptance/<controller_names>_spec.rb`
 
-### 接口文档生成
+#### 接口文档生成
 
 `bin/rake docs:generate`
 
-## 设计 Table
+### 设计 Table
 
 t.string 和 t.text 区别
 
@@ -278,7 +279,7 @@ t.string 和 t.text 区别
 
 3. 索引： 由于字符串类型有固定的最大长度，因此可以创建索引以提高搜索和排序的性能。文本类型没有固定的最大长度，所以不能创建普通索引，但可以创建全文索引（Full-Text Index）来支持全文搜索。
 
-## Model
+### Model
 
 执行生成命令后，rails 会帮我们创建`数据模型文件`及`数据库schema`文件；
 
@@ -306,7 +307,7 @@ ActiveRecord 是 Rails 中的默认 ORM 工具，用于简化与数据库的交�
 
 而 controller 层仅用于操作数据库，根据不同情况返回不同响应
 
-## Migration
+### Migration
 
 生成 model 会生成 migration 文件
 
@@ -314,13 +315,13 @@ ActiveRecord 是 Rails 中的默认 ORM 工具，用于简化与数据库的交�
 
 数据库表结构只能通过执行一次新的 migration 来修改
 
-## Controller
+### Controller
 
 执行生成命令后，rails会帮我们创建`控制器文件`及`对应路由`
 
 专注于请求/响应逻辑，与数据库交互的逻辑等
 
-### 路由
+#### 路由
 
 resource 定义了一个 RESTful 资源，表示该资源具有多个默认的 CRUD（创建、读取、更新、删除）操作。
 
@@ -347,7 +348,7 @@ only 数组中定义了该资源接收的请求方法，其余请求方法均会
 
 这些方法通常与路由一起使用，以便在浏览器中使用相应的 URL 访问它们。例如，index方法可以与 GET /posts 或 /posts?page=1 路由关联，而show方法可以与 GET /posts/:id 路由关联
 
-### CRUD Api
+#### CRUD Api
 
 在编写 controller 逻辑时，通常需要借助 model 类对数据库进行增删改查的操作。下面列举一些常见 api
 
@@ -363,7 +364,7 @@ find_by 使用传入的值作为查询条件，返回第一个满足条件的数
 
 update 一般使用find查数据，该数据，再save，相当于update
 
-### 响应
+#### 响应
 
 rails 提供了 render、head、redirect_to等关键字指定响应体内容或重定向操作
 
@@ -377,7 +378,7 @@ render 关键字可以指定要渲染的视图模板、设置响应头、指定�
 
 `head` 方法则更适用于简单的状态码响应，不需要具体响应主体内容的情况。
 
-## TDD
+### TDD
 
 TDD 测试驱动开发是一种开发策略，即先写单元测试，再以通过测试的目的来写 controller 层逻辑。测试完成后，接口功能基本也实现了
 
@@ -409,9 +410,9 @@ Rspec.configure do |config|
 
 接口文档页面在 doc/api 文件夹下，使用 `npx http-server doc/api` 来查看
 
-# 其他
+## 其他
 
-## 密钥管理
+### 密钥管理
 
 1. 生成或编辑 keys `bin/rails credentials:edit`
 2. or 指定 vscode 编辑 `EDITOR="code --wait" bin/rails credentials:edit`
@@ -423,7 +424,7 @@ Rspec.configure do |config|
 8. 剧透：对于本项目来说，只会管理 jwt 密钥、邮箱服务器授权码及数据库密码
 9. 查看密钥：`bin/rails c | Rails.application.credentials.config`
 
-## 中间件
+### 中间件
 
 写中间件
 bin/rails middleware 显示全部中间件
@@ -448,7 +449,7 @@ end
 
 改写 mes controller
 
-## 配置邮件服务器
+### 配置邮件服务器
 
 1. 创建 mailer `bin/rails generate mailer User`
 
@@ -538,7 +539,78 @@ UserMailer.welcome_email('123456').deliver
 
 记得生产环境也需要配置授权码
 
-# 部署
+## 部署
+
+生产环境使用 puma 作为后端服务器，使用 puma-daemon 后台运行
+
+[kigster/puma-daemon: Puma (starting version 5) removed automatic demonization from the gem itself. This functionality was extracted to this gem, which supports Puma v5 and v6. (github.com)](https://github.com/kigster/puma-daemon#what-is-daemonization)
+
+Gemfile 添加依赖
+
+```ruby
+gem "puma", "~> 5.0"
+
+gem 'puma-daemon', require: false
+```
+
+bundle 安装依赖
+
+修改 puma 配置
+
+```ruby
+require 'puma/daemon'
+# Puma can serve each request in a thread from an internal thread pool.
+# The `threads` method setting takes two numbers: a minimum and maximum.
+# Any libraries that use thread pools should be configured to match
+# the maximum value specified for Puma. Default is set to 5 threads for minimum
+# and maximum; this matches the default thread size of Active Record.
+#
+max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
+min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
+threads min_threads_count, max_threads_count
+
+# Specifies the `worker_timeout` threshold that Puma will use to wait before
+# terminating a worker in development environments.
+#
+worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
+
+# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+#
+port ENV.fetch("PORT") { 3000 }
+
+# Specifies the `environment` that Puma will run in.
+#
+environment ENV.fetch("RAILS_ENV") { "production" }
+
+# Specifies the `pidfile` that Puma will use.
+pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
+
+# Specifies the number of `workers` to boot in clustered mode.
+# Workers are forked web server processes. If using threads and workers together
+# the concurrency of the application would be max `threads` * `workers`.
+# Workers do not work on JRuby or Windows (both of which do not support
+# processes).
+#
+# workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+
+# Use the `preload_app!` method when specifying a `workers` number.
+# This directive tells Puma to first boot the application and load code
+# before forking the application. This takes advantage of Copy On Write
+# process behavior so workers use less memory.
+#
+# preload_app!
+
+# Allow puma to be restarted by `bin/rails restart` command.
+plugin :tmp_restart
+
+stdout_redirect 'log/access.log', 'log/error.log', true
+
+daemonize
+```
+
+开启后台 puma 服务器 `bundle exec puma -C config/puma.rb`
+
+终止后台 puma 服务器 `bundle exec pumactl stop`
 
 
 

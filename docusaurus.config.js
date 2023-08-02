@@ -137,6 +137,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/GSemir0418',
               },
+              {
+                label: 'Docusaurus',
+                href: 'https://docusaurus.io/',
+              },
             ],
           },
         ],
