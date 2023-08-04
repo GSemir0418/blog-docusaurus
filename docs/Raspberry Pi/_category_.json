@@ -1,8 +1,8 @@
 {
   "label": "Raspberry Pi",
-  "position": 3,
+  "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "5 minutes to learn the most important Docusaurus concepts."
+    "description": "树莓派从开机到个人生产环境服务器搭建"
   }
 }

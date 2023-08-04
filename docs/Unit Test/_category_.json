@@ -1,0 +1,8 @@
+{
+  "label": "Unit Test",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "基于 React、Jest 单元测试指南"
+  }
+}

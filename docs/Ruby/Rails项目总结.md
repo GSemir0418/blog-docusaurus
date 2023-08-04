@@ -1,5 +1,5 @@
 ---
-sidebar-position: 1
+sidebar-position: 2
 title: Rails 项目总结
 authors: gsemir
 date: 2023-07-11
