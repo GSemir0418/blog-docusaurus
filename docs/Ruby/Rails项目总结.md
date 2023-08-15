@@ -541,9 +541,50 @@ UserMailer.welcome_email('123456').deliver
 
 ## 部署
 
-生产环境使用 puma 作为后端服务器，使用 puma-daemon 后台运行
+### 密钥配置
 
-[kigster/puma-daemon: Puma (starting version 5) removed automatic demonization from the gem itself. This functionality was extracted to this gem, which supports Puma v5 and v6. (github.com)](https://github.com/kigster/puma-daemon#what-is-daemonization)
+- 保存数据库密码、邮箱权限码以及 jwt 密钥
+
+`EDITOR="code --wait" rails credentials:edit --environment production`
+
+或者
+
+`EDITOR="vi" rails credentials:edit --environment production`
+
+> 可以通过 `bin/rails c` 进入控制台查询开发环境的密钥（Rails.application.credentials.config）
+
+### 数据库配置
+
+`config/database.yml`
+
+```yml
+production:
+  <<: *default
+  database: rails_todo_production
+  username: ubuntu
+  # password: <%= ENV["RAILS_TODO_1_DATABASE_PASSWORD"] %>
+  password: <%= Rails.application.credentials.db_password %>
+  host: localhost
+  port: 5432
+```
+
+### 运行环境配置
+
+- 设置服务器环境变量
+
+`vi ~/.zshrc` RAILS_ENV=production
+
+- 配置 bundle 源 `bundle config mirror.https://rubygems.org https://gems.ruby-china.com`
+
+- 安装依赖pg报错 `sudo apt install libpq-dev`
+
+- 邮件配置 `config/environments/production.rb`
+
+- 脚本环境变量读不出来的bug：脚本开头加上 `source "/home/$user/.zshrc"`
+
+- 生产环境使用 puma 作为后端服务器，使用 `puma-daemon` 后台运行
+
+> [kigster/puma-daemon: Puma (starting version 5) removed automatic demonization from the gem itself. This functionality was extracted to this gem, which supports Puma v5 and v6. (github.com)](https://github.com/kigster/puma-daemon#what-is-daemonization)
 
 Gemfile 添加依赖
 
@@ -612,7 +653,106 @@ daemonize
 
 终止后台 puma 服务器 `bundle exec pumactl stop`
 
+### 部署脚本 bin/deploy.sh
 
+```sh
+function title {
+  echo 
+  echo "###############################################################################"
+  echo "## $1"
+  echo "###############################################################################" 
+  echo 
+}
+
+user=ubuntu
+ip=gsemir2.tpddns.cn
+project_name=todo-backend-rails
+time=$(date +'%Y%m%d-%H%M%S')
+cache_dir=tmp/deploy_cache
+dist=$cache_dir/todo-$time.tar.gz
+current_dir=$(dirname $0)
+deploy_dir=/home/$user/deploys/backend/$project_name/$time
+gemfile=$current_dir/../Gemfile
+gemfile_lock=$current_dir/../Gemfile.lock
+vendor_dir=$current_dir/../vendor
+vendor_api=rspec_api_documentation
+
+mkdir -p $cache_dir
+# 打包源代码至 tmp
+title '打包源码（缓存与依赖除外）'
+tar --exclude="tmp/cache/*" --exclude="tmp/deploy_cache/*" --exclude="vendor/*" -cz -f $dist *
+# 打包本地依赖优化项目部署效率
+title "打包本地依赖以及${vendor_api}"
+bundle cache --quiet
+tar -cz -f "$vendor_dir/cache.tar.gz" -C ./vendor cache
+tar -cz -f "$vendor_dir/$vendor_api.tar.gz" -C ./vendor $vendor_api
+title '创建远程目录'
+ssh $user@$ip "mkdir -p $deploy_dir/vendor"
+title '上传源代码及依赖'
+scp $dist $user@$ip:$deploy_dir/
+yes | rm $dist
+scp $gemfile $user@$ip:$deploy_dir/
+scp $gemfile_lock $user@$ip:$deploy_dir/
+# 将cache也上传到部署目录下 -r表示整个路径下的内容
+scp -r $vendor_dir/cache.tar.gz $user@$ip:$deploy_dir/vendor/
+yes | rm $vendor_dir/cache.tar.gz
+scp -r $vendor_dir/$vendor_api.tar.gz $user@$ip:$deploy_dir/vendor/
+yes | rm $vendor_dir/$vendor_api.tar.gz
+title '上传 setup 脚本'
+scp $current_dir/setup.sh $user@$ip:$deploy_dir/
+title '执行远程启动脚本'
+ssh $user@$ip "export version=$time; /usr/bin/zsh $deploy_dir/setup.sh"
+```
+
+### 运行脚本 bin/setup.sh
+
+```sh
+#! /usr/bin/zsh
+function title {
+  echo 
+  echo "###############################################################################"
+  echo "## $1"
+  echo "###############################################################################" 
+  echo 
+}
+
+user=ubuntu
+project_name=todo-backend-rails
+root=/home/$user/projects/backend/$project_name/$version
+deploy_dir=/home/$user/deploys/backend/$project_name/$version
+
+title '初始化zsh'
+source "/home/$user/.zshrc"
+title '创建项目根目录'
+mkdir -p $root/vendor
+title '拷贝Gemfile至项目根目录'
+cd $deploy_dir
+cp Gemfile $root
+# 暂时不用 lock，因为服务器架构不同，依赖版本不同
+# cp Gemfile.lock $root
+title '解压缩依赖包至项目根目录'
+tar -xz -f ./vendor/cache.tar.gz -C $root/vendor
+tar -xz -f ./vendor/rspec_api_documentation.tar.gz -C $root/vendor
+title '本地安装依赖'
+cd $root
+# bundle config set --local without 'development test'
+# bundle install --local
+bundle install
+title '解压缩源代码'
+tar -xz -f $deploy_dir/todo-$version.tar.gz -C ./
+# echo "是否要更新数据库？[y/N]"
+# read ans
+# case $ans in
+#     y|Y|1  )  echo "yes"; title '更新数据库'; bin/rails db:create db:migrate ;;
+#     n|N|2  )  echo "no" ;;
+#     ""     )  echo "no" ;;
+# esac
+# title '启动项目'
+# bin/rails s
+title '部署完毕, 请手动安装依赖并同步数据库'
+title '启动项目 bundle exec puma -C config/puma.rb'
+title '终止项目 bundle exec pumactl stop'
+```
 
 
 
