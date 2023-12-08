@@ -78,7 +78,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Blog',
+            label: '文章',
           },
           {
             label: '个人项目',
@@ -86,7 +86,7 @@ const config = {
             to: '/projects-page'
           },
           {
-            label: '每日X问',
+            label: 'Blog',
             position: 'left',
             to: '/blog'
           },
