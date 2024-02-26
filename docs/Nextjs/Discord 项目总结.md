@@ -391,7 +391,7 @@ export default async function handler(
 
 - 数据库表设计如下图：
 
-![prisma](/Users/gsemir/Downloads/prisma.svg)
+![prisma](./images/prisma.svg)
 
 - Prisma Schema￼
 
@@ -520,7 +520,7 @@ Radix UI 是一个 Headless UI 库。也就是说，它有组件 API，但没有
 >
 > 也可以声明一个组件，但在 FC 的基础上强调了 ref 参数，虽然直接在组件的 props 类型中定义 ref 属性也可以传递 ref，但是使用 forwardRef 可以提供更清晰、更灵活、更易用的方式来处理 ref。
 
-![shadcn](/Users/gsemir/Downloads/shadcn.png)
+![shadcn](./images/shadcn.png)
 
 ### 类名拼接
 
@@ -1407,4 +1407,4 @@ docker run -p 3000:3000 -d $container_name
 
 - 浏览器不允许 http 站点访问用户的摄像头、麦克风等权限，导致项目的视频语音通话功能无法实现。此时需要访问 `chrome://flags`，将 `Insecure origins treated as secure` 选项启动，并输入我们的 http 站点即可
 
-![image-20240219094903262](/Users/gsemir/Library/Application Support/typora-user-images/image-20240219094903262.png)
+![image-20240219094903262](./images/image-20240219094903262.png)
