@@ -1,7 +1,7 @@
 ---
-title: Nextjs 架构实战
+title: Netflix-clone 项目总结
 date: 2023-06-14T15:19:00+08:00
-sidebar-position: 2
+sidebar-position: 1
 authors: gsemir
 tags: [Nextjs, TailwindCSS, Prisma, React, TypeScript]
 ---
