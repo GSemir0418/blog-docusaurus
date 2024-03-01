@@ -1,5 +1,5 @@
 ---
-title: TCP与泛洪攻击
+title: TCP 与泛洪攻击
 date: 2023-12-19T14:15:00
 authors:
   name: GSemir
@@ -22,7 +22,7 @@ authors:
 
 当客户端收到连接同意的应答后，还要向服务端发送一个确认报文。客户端发完这个报文段后便进入 `ESTABLISHED` 状态，服务端收到这个应答后也进入 `ESTABLISHED` 状态，此时连接建立成功。
 
-![image-20231219170511166](/Users/gsemir/Desktop/2023-repos/blog-docusaurus/blog/2023/12/:Users:gsemir:Library:Application Support:typora-user-images:image-20231219170511166.png)
+![image-20231219170511166](./images/19-1.png)
 
 ### TCP 四次挥手
 
@@ -44,7 +44,7 @@ PS：通过延迟确认的技术（通常有时间限制，否则对方会误认
 
 A 收到释放请求后，向 B 发送确认应答，此时 A 进入 TIME-WAIT 状态。该状态会持续 2MSL（最长报文段寿命，指报文段在网络中生存的时间，超时会被抛弃） 时间，若该时间段内没有 B 的重发请求的话，就进入 CLOSED 状态。当 B 收到确认应答后，也便进入 CLOSED 状态。
 
-![image-20231219170654861](/Users/gsemir/Desktop/2023-repos/blog-docusaurus/blog/2023/12/:Users:gsemir:Library:Application Support:typora-user-images:image-20231219170654861.png)
+![image-20231219170654861](./images/19-2.png)
 
 ### TCP 泛洪攻击
 

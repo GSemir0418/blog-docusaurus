@@ -1,5 +1,5 @@
 ---
-title: data-*属性
+title: data-* 属性
 date: 2023-12-10T14:15:00
 authors:
   name: GSemir
