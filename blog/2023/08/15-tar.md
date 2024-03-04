@@ -6,6 +6,7 @@ authors:
   url: https://github.com/GSemir0418
   image_url: https://github.com/GSemir0418.png
   email: gsemir0418@gmail.com
+tags: [linux, tar]
 ---
 tar 命令是 linux 系统中用于文件归档与压缩工具
 

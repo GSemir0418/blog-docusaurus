@@ -6,6 +6,7 @@ authors:
   url: https://github.com/GSemir0418
   image_url: https://github.com/GSemir0418.png
   email: gsemir0418@gmail.com
+tags: [javascript, router]
 ---
 
 Browser 路由和 Hash 路由等路由技术解析与实现

@@ -6,6 +6,7 @@ authors:
   url: https://github.com/GSemir0418
   image_url: https://github.com/GSemir0418.png
   email: gsemir0418@gmail.com
+tags: [javascript, html]
 ---
 data-* 属性允许我们在标准、语义化的 HTML 元素中存储额外的信息，而不需要使用类似于非标准属性或者 DOM 额外属性之类的技巧。
 

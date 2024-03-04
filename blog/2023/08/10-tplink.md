@@ -6,6 +6,7 @@ authors:
   url: https://github.com/GSemir0418
   image_url: https://github.com/GSemir0418.png
   email: gsemir0418@gmail.com
+tags: [tplink]
 ---
 
 ## 记录一下tplink路由器设置与服务器网络环境配置
