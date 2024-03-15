@@ -1,0 +1,8 @@
+{
+  "label": "NLP",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "基于自然语言处理和意图识别的智能交互助手，能够理解和响应用户的页面交互指令，并执行相应的操作"
+  }
+}

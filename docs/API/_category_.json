@@ -1,6 +1,6 @@
 {
   "label": "API",
-  "position": 5,
+  "position": 7,
   "link": {
     "type": "generated-index",
     "description": "学习常见 API 架构设计与原理，掌握 RESTful、GraphQL 以及 tRPC 技术的基本开发应用。"
