@@ -10,3 +10,9 @@ tags: [javascript, let, var]
 ---
 
 栈就相当于数组把第一位（左边）堵住，然后只有 pop 和 push 方法
+
+1. 全局污染
+
+`var` 声明的变量（全局作用域）会挂载到 window 对象上
+
+`let` 则不会，但能够跨 `<script>` 标签使用
