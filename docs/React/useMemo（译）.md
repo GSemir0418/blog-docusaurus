@@ -2,7 +2,7 @@
 title: useMemo（译）
 date: 2023-02-08T15:19:00+08:00
 tags: ["react", "useMemo"]
-sidebar-position: 3
+sidebar-position: 4
 authors: gsemir
 ---
 

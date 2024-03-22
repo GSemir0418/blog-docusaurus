@@ -11,7 +11,7 @@ tags: [javascript, commonjs, require]
 
 整个 commonjs 的运行都依托于 require 函数的执行机制，所以研究 commonjs 的关键就在于理解 require 函数的本质
 
-- require 函数的实现
+#### require 函数的实现
 
 require 函数接收模块路径作为参数
 
@@ -68,7 +68,8 @@ function require(modulePath) {
 }
 ```
 
-- 问题：2.js 中 m 的值为？
+#### 问题：2.js 中 m 的值为？
+
 - 牢记模块代码中的 **this、exports 和 module.exports 默认指向同一个对象**
 
 ```js
@@ -98,3 +99,41 @@ const m = require('./1.js')
 | `this.f = 6`                | `{ a: 1, b: 2, f: 6 }` | `{ d: 4 }`       | `{ c: 3, e: 5 }` |
 
 require 函数最终返回的是 module.exports 对象，因此变量 m 的值为 `{ d: 4 }`
+
+#### require 与 import 区别
+
+- **import**
+
+1. `import` 是 ES6 (ECMAScript 2015) 中引入的，用于**静态导入模块**。
+
+2. 它允许使用**解构赋值**的方式来引入模块中的特定部分。
+
+3. `import`具有**提升**效果，无论在文件的哪个部分使用，都会被**提升到文件顶部**。
+
+4. `import`语句只能在**模块的顶层作用域**中使用，不能在条件语句中。
+
+5. 它与ES6模块系统配合使用，支持模块的**静态分析**和**树摇操作**（tree-shaking），有助于实现**按需加载**。
+
+- **require**
+
+1. `require`是 CommonJS 规范中引入的，用于在 Node.js 中**同步导入模块**。
+
+2. 使用`require`时，你直接获取到一个模块的导出对象
+
+3. `require` 在运行时调用，意味着可以根据条件的不同**动态地加载不同的模块**。
+
+4. 可以在代码的**任何地方**使用`require`，包括在函数或条件语句中。
+
+5. `require` 通常**不支持无用代码移除**和**按需加载**，因为它是动态加载的。
+
+- **区别**
+
+1. `import` 是静态的，支持编译时优化；`require`是动态的，适用于条件加载和运行时的计算路径。
+
+2. `import`需要在模块顶部，且不能在代码块中使用；`require`则可以在模块的任何地方使用。
+
+3. `import`语句可以让现代的JS打包工具和引擎**优化**导入的模块；`require`则不支持这些优化功能。
+
+4. `import`语句主要用于前端JavaScript模块化，而`require`则常用于Node.js的模块系统。
+
+在实际开发中，如果使用的是Node.js，并且没有使用工具如Babel或Webpack对代码进行转换和打包，通常会使用`require`。如果开发的是现代的前端应用程序，并且项目配置了相应的JS打包工具，则推荐使用`import`语法来引入模块。随着Node.js对ES6模块的支持日益完善，`import`语句的使用变得越来越广泛。
