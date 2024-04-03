@@ -2,28 +2,21 @@
 title: GSemir Intro
 ---
 
-# 欢迎来到 GSemir 的个人主页
+🇨🇳 Hi there, I’m GSemir, a full-stack developer from Hangzhou, China.
 
-## 🧑 基本情况
+👨‍💻 3 years of experience in front-end development.
 
-🇨🇳 杭州 27岁
+👨‍🎓 Master's degree in Computer Science
 
-🖥︎ 编程爱好者
+✍️ Dedicated to producing high-quality code.
 
-👨‍💻 从事 前端开发 3年
+🔗 Value teamwork highly.
 
-👨‍🎓 计算机技术硕士
+🎉 Welcome to my personal site, I hope it can be of help to you.
 
-作为一名前端开发工程师，我热衷于创造美观、易用且高度交互的用户界面。我拥有X年的前端开发经验，熟练掌握HTML、CSS和JavaScript等前端技术。我善于将设计师提供的概念转化为现实，并致力于提供卓越的用户体验。
+If you have any questions or proposals for collaboration, do not hesitate to reach out to me at your convenience.
 
-我的职业生涯中，我参与了多个项目的开发，从而获得了广泛的经验和技能。我具备扎实的编码能力和良好的问题解决能力，能够快速理解需求并提供高效的解决方案。同时，我注重代码的可读性、可维护性和性能优化，以确保产品的质量和稳定性。
-
-除了技术方面，我也是一个强调团队合作的人。我乐于与设计师、后端开发人员和其他相关团队成员紧密合作，共同推动项目的成功。我善于沟通并注重与他人的合作，以实现团队目标。
-在我的个人博客中，我不仅分享了我在前端开发方面的知识和经验，还记录了我在项目中遇到的挑战和解决方案。我希望通过这种方式能够为其他开发者提供帮助和启发，并与他们交流和互动。
-
-感谢您对我的个人博客的关注！我期待能够与您分享更多有趣的内容，并在前端技术领域一起成长。如果您有任何问题或合作机会，欢迎随时与我联系。
-
-## 🛠 技术栈
+## 🛠 Tech Stack
 
 System
 
