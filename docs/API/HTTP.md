@@ -103,7 +103,7 @@ HTTP/2 保留了请求和响应的概念，请求头和响应头会被发送方�
 
 | HTTP/1.1                                                     | HTTP/2                                                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| GET /resource HTTP/1.1<br>Host: example.org<br>Accept: image/jpeg | HEADERS<br/>+ END_STREAM<br/>+ END_HEADERS :method = GET<br/>:scheme = https<br/>:path = /resource<br/>host = example.org<br/>accept = image/jpeg |
+| GET /resource HTTP/1.1<br/>Host: example.org<br/>Accept: image/jpeg | HEADERS<br/>+ END_STREAM<br/>+ END_HEADERS :method = GET<br/>:scheme = https<br/>:path = /resource<br/>host = example.org<br/>accept = image/jpeg |
 | POST /resource HTTP/1.1<br/>Host: example.org<br/>Content-Type: image/jpeg<br/>Content-Length: 123 <br/><br/>{消息体} | HEADERS<br/>- END_STREAM<br/>- END_HEADERS<br/>:method = POST<br/>:path = /resource<br/>:scheme = https<br/><br/>CONTINUATION<br/>+ END_HEADERS<br/>content-type = image/jpeg<br/>host = example.org<br/>content-length = 123<br/><br/>DATA<br/>+ END_STREAM<br/>{消息体} |
 | HTTP/1.1 200 OK<br/>Content-Type: image/jpeg<br/>Content-Length: 123<br/><br/>{响应体} | HEADERS<br/>- END_STREAM<br/>+ END_HEADERS<br/>:status = 200<br/>content-type = image/jpeg<br/>content-length = 123<br/><br/>DATA<br/>+ END_STREAM<br/>{响应体} |
 
