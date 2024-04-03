@@ -78,10 +78,10 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: '文章',
+            label: 'Article',
           },
           {
-            label: '个人项目',
+            label: 'Project',
             position: 'left',
             to: '/projects-page'
           },
@@ -101,10 +101,10 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: '博客',
+            title: 'Blog',
             items: [
               {
-                label: '旧博客',
+                label: 'Notes',
                 href: 'https://gsemir0418.github.io/'
               },
               // {
@@ -114,7 +114,7 @@ const config = {
             ],
           },
           {
-            title: '社交媒体',
+            title: 'Social',
             items: [
               {
                 label: 'Gmail',
@@ -122,6 +122,10 @@ const config = {
               },
               {
                 label: 'Github',
+                href: 'https://github.com/GSemir0418',
+              },
+              {
+                label: 'WeChat',
                 href: 'https://github.com/GSemir0418',
               },
             ],
