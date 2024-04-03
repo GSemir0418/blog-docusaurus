@@ -113,6 +113,17 @@ History 路由的实现主要依赖浏览器的 `history API`，通过监听 `po
   }
 </script>
 ```
+- 但当用户刷新页面之类的操作时，浏览器还是会给服务器发送请求，此时如果请求路径非根路径，nginx就会出现 404 的问题
+- 为了避免出现这种情况，需要修改 nginx 的配置，把所有路由都重定向到根页面。
+
+```nginx
+location / {
+  root 路径;
+  index index.html index.htm;
+  try_files $uri $uri/ /index.html;
+}
+```
+
 ## 扩展：history 与 location
 
 ### 联系
@@ -126,3 +137,4 @@ History 路由的实现主要依赖浏览器的 `history API`，通过监听 `po
 1. window.location： 是一个表示当前浏览器URL的对象。它具有许多属性，如href、protocol、hostname、pathname、search、hash等，用于获取和设置URL的各个部分。通过window.location，我们可以读取当前页面的URL
 
 2. window.history： 是一个表示浏览器历史记录的对象。它具有back()、forward()、go()等方法，以及length属性来获取历史记录中的条目数量。通过history对象，我们可以实现前进、后退和在历史记录中导航的功能。
+
