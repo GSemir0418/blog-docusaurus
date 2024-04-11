@@ -167,13 +167,13 @@ authors: gsemir
 
 所以浏览器采用异步的方式来避免。具体做法是当某些任务（比如计时器、网络、事件监听）发生时，主线程将任务交给其他线程去处理，自身立即结束任务的执行，转而执行后续代码。当其他线程完成时，将事先传递的回调函数**包装**成**任务**，加入到消息队列的末尾**排队**，等待主线程调度执行。
 
-> 事件循环就是异步调度任务的实践方案
+> 事件循环就是**异步调度任务**的实践方案
 
 在这种异步模式下，浏览器永不阻塞，从而最大限度的保证了单线程的流畅运行。
 
 ### 3.2 阐述一下 JS 的事件循环
 
->事件循环是浏览器渲染主线程的工作机制
+>事件循环是浏览器**渲染主线程**的工作机制
 
 事件循环又叫做**消息循环**，是浏览器**渲染主线程的工作方式/机制**。
 
@@ -216,3 +216,60 @@ setTimeout(() => console.log(6));
 console.log(7);
 ```
 
+再来
+
+```js
+// 1
+async function async1(){
+  console.log('async1 start');
+  let res = await async2();
+  console.log(res);
+  console.log('async1 end');
+}
+
+async function async2(){
+  console.log('async2 start');
+  return 'async2 end'
+}
+
+console.log('script start');
+setTimeout(() => {
+  console.log('setTimeout');
+}, 0);
+async1();
+new Promise((resolve,reject) => {
+  console.log('Promise start');
+  resolve();
+}).then(() => {
+  console.log('Promise end');
+})
+console.log('script end');
+
+// 2
+console.log(1)
+setTimeout(() => {
+    console.log(2)
+    new Promise((resolve, reject) => {
+        console.log(3)
+        resolve(4)
+    }).then((res) => {
+        console.log(res) 
+    })
+}, 0)
+new Promise((resolve, reject) => {
+    console.log(5)
+    resolve()
+}).then(() => {
+    console.log(6)
+    setTimeout(() => {
+        console.log(7)
+    })
+    return Promise.resolve(8)
+}).then(res => {
+    console.log(res);
+})
+console.log(9)
+```
+
+1. 如果 Promise 没有（执行到） `resolve()`，那么 `then` 回调就**不会**进入微队列
+2. async 函数中 `return "xxx"` 关键字会使得这个函数返回一个立即解析为 `"xxx"` 的 `Promise`，换成 `await "xxx"` 对运行结果没有影响

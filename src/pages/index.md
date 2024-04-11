@@ -6,13 +6,15 @@ title: GSemir Intro
 
 🇨🇳 Hi there, I’m GSemir, a **full-stack developer** from **Hangzhou**, China.
 
-👨‍💻 **3** years of experience in front-end development.
+👨‍💻 **3** years of experience in **front-end** development.
 
 👨‍🎓 Master's degree in Computer Science
 
 ✍️ Dedicated to producing high-quality code.
 
-🔗 Value teamwork highly.
+🔎 Love to learn new technologies and to explore new sets of areas.
+
+👁‍🗨 Ability to quickly Learn and Master a new skill and to implement it to solve a real-time problem.
 
 🎉 Welcome to my personal site, I hope it can be of help to you.
 
