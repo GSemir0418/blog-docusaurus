@@ -1,6 +1,6 @@
 ---
-sidebar-position: 1
-title: React 工作原理(旧)
+sidebar-position: 13
+title: React 工作原理
 date: 2024-04-05
 authors: gsemir
 tags: [react, reconcile, fiber]
