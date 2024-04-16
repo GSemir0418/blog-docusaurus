@@ -80,11 +80,11 @@ const config = {
             position: 'left',
             label: 'Article',
           },
-          {
-            label: 'Project',
-            position: 'left',
-            to: '/projects-page'
-          },
+          // {
+          //   label: 'Project',
+          //   position: 'left',
+          //   to: '/projects-page'
+          // },
           {
             label: 'Blog',
             position: 'left',
