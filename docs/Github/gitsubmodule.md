@@ -1,5 +1,5 @@
 ---
-sidebar-position: 3
+sidebar-position: 1
 title: Git Submodule
 date: 2024-03-22T17:59:59
 authors: gsemir

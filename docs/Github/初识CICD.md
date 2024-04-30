@@ -1,5 +1,5 @@
 ---
-sidebar-position: 2
+sidebar-position: 5
 title: 初识 CICD
 date: 2023-04-02T17:59:59
 authors: gsemir
