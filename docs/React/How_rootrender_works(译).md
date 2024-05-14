@@ -1,5 +1,5 @@
 ---
-sidebar-position: 2
+sidebar-position: 12
 title: How root.render() works(译)
 date: 2024-04-17
 authors: gsemir

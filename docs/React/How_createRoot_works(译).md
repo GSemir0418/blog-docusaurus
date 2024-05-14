@@ -1,5 +1,5 @@
 ---
-sidebar-position: 1
+sidebar-position: 11
 title: How createRoot works(译)
 date: 2024-04-15
 authors: gsemir
