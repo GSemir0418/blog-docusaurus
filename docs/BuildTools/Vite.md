@@ -46,3 +46,56 @@ ESBuild 虽然构建速度快，但灵活性与可扩展性以及技术生态还
 
 目前 Vite 团队正在基于 Rust 重构 Rollup，命名为 Rolldown，一旦 Rolldown 问世，Vite 就会替换 Rollup 和 ESBuld，显著提高构建性能，并消除开发和构建之间的不一致性
 
+### 手动分包
+
+vite 默认情况下都会将全部源码和全部依赖重新打包成一个 js 文件。这对于依赖库很多或者很重的项目来说，每次版本更新，客户端都需要重新下载这个 js 文件（文件指纹变了），一定程度上影响了用户体验。
+
+解决方案就是手动分包，将依赖和源码分开打包成若干个 js 文件
+
+vite 在打包时使用的是 rollup，支持 rollup 的 `manualChunks` 分包配置：
+
+```ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react': ['react'],
+          'react-router-dom': ['react-router-dom'],
+          // 也可以写成一个
+          'vendor': ['react', 'react-router-dom'],
+        }
+      }
+    }
+  }
+})
+```
+
+同时 `manualChunks` 支持传入函数，入参为依赖的文件 id，返回值可以为字符串
+
+```ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if(id.includes('node_modules')) {
+            return 'vendor'
+          }
+        }
+      }
+    }
+  }
+})
+```
+

@@ -1088,7 +1088,7 @@ useChatScroll({
 })
 ```
 
-### cursor + InfiniteQuery 分页方案请求
+### cursor + InfiniteQuery 分页请求方案
 
 使用 react-query 进行数据请求：`npm i @tanstack/react-query`
 
