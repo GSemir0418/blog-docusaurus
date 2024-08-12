@@ -184,7 +184,7 @@ React 团队发现，在日常开发中，对节点更新操作的情况往往�
 
 - 发现 key 不同了
 
-![image-20240808140833819](/Users/gsemir/Desktop/2023-repos/blog-docusaurus/docs/React/images/react-102.png)
+![image-20240808140833819](./images/react-102.png)
 
 ### 第二轮遍历
 
