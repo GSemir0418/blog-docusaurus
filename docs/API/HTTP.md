@@ -326,7 +326,8 @@ Cookies、SessionStorage和LocalStorage三者都是在浏览器中存储数据�
 
 - 防范：设置 `SameSite Cookie` 属性，它能够限制第三方网站发起的请求中是否携带本网站的 Cookies；将服务器端生成的、对于每个用户会话都是独一无二的 `CSRF Tokens`，嵌入在表单中。因为攻击者无法知道这个Token，所以他们不能构造一个有效的请求。
 
-<hr>
+------
+
 
 #### 常见状态码
 
