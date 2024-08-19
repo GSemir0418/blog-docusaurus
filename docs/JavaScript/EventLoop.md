@@ -191,7 +191,9 @@ authors: gsemir
 
 ### 3.3 如果宏微任务队列空了，会发生什么
 
-一帧时间内，task 和 micro task 执行完：
+**一帧时间**内，task 和 micro task 执行完：
+
+> 微 -> 宏 -> rAF -> 渲染 -> GC -> rIC -> IDLE
 
 - 在微任务全部执行完后，如果有通过 `requestAnimationFrame `注册的回调函数，这些函数会在下一次重绘之前被调用。它们主要用于进行动画相关的计算和DOM操作。
 
@@ -229,33 +231,6 @@ console.log(7);
 再来
 
 ```js
-// 1
-async function async1(){
-  console.log('async1 start');
-  let res = await async2();
-  console.log(res);
-  console.log('async1 end');
-}
-
-async function async2(){
-  console.log('async2 start');
-  return 'async2 end'
-}
-
-console.log('script start');
-setTimeout(() => {
-  console.log('setTimeout');
-}, 0);
-async1();
-new Promise((resolve,reject) => {
-  console.log('Promise start');
-  resolve();
-}).then(() => {
-  console.log('Promise end');
-})
-console.log('script end');
-
-// 2
 console.log(1)
 setTimeout(() => {
     console.log(2)
@@ -282,4 +257,120 @@ console.log(9)
 ```
 
 1. 如果 Promise 没有（执行到） `resolve()`，那么 `then` 回调就**不会**进入微队列
-2. async 函数中 `return "xxx"` 关键字会使得这个函数返回一个立即解析为 `"xxx"` 的 `Promise`，换成 `await "xxx"` 对运行结果没有影响
+2. async 函数中 `return "xxx"` 关键字会使得这个函数返回一个立即解析为 `"xxx"` 的 `Promise`
+
+### 3.6 async await
+
+`async` 和 `await` 是 JavaScript 中用于处理**异步编程**的**关键字**，它们使得异步代码的编写和阅读变得更加直观和简洁。
+
+- **async**：用于**定义一个异步函数**。异步函数会**返回一个 Promise** 对象，函数内部的代码可以使用 `await` 关键字来暂停执行，直到 Promise 被解决（fulfilled）或拒绝（rejected）。
+- **await**：用于等待一个 Promise 的解决。它只能在 `async` 函数内部使用。当执行到 `await` 时，函数会暂停，直到 Promise 解决后再继续执行后面的代码。
+
+在事件循环中的分析思路：
+
+1. 当调用一个 `async` 函数时，函数体内的代码会立即执行，直到遇到第一个 `await`。
+2. 遇到 `await` 时，函数会暂停执行，并将控制权返回给调用者。
+3. 当 Promise 被解决后，事件循环会将控制权返回给 `async` 函数，继续执行 `await` 后面的代码。
+
+```js
+async function async1(){
+  console.log('async1 start');
+  let res = await async2(); // 去 async2 继续执行
+  // 后续代码包括 res 的赋值，都要进微队列，等 async2 settle 之后
+  console.log(res);
+  console.log('async1 end');
+}
+
+async function async2(){
+  console.log('async2 start');
+  return 'async2 end'
+  // 相当于 async2 返回了 Promise.resolve('async2 end')
+}
+
+console.log('script start');
+setTimeout(() => {
+  console.log('setTimeout');
+}, 0);
+async1();
+new Promise((resolve,reject) => {
+  console.log('Promise start');
+  resolve();
+}).then(() => {
+  console.log('Promise end');
+})
+console.log('script end');
+```
+
+## 4 Nodejs 中的 EventLoop
+
+### 4.1 综述
+
+Nodejs 使用 V8 作为 JS 的解析引擎，而 IO 处理使用了自己设计的 libuv，事件循环机制就是其内部实现
+
+分为**六个**阶段，除去内部使用的阶段，学习者只需关注其中三个阶段
+
+- **timers 阶段**：执行 setTimeout、setInterval 回调
+- **poll 阶段**：获取新的 io 事件，适当的条件下 Nodejs 将阻塞在这里
+- **check 阶段**：执行 setImmediate 回调
+
+事件循环的执行顺序：
+
+外部输入数据 -> 轮询poll -> check -> timer -> poll
+
+清空微队列的时机：与浏览器一致，**在执行任务前，都要先清空微队列**
+
+### 4.2 注意事项
+
+- **定时器时间**
+
+nodejs 中定时器指定的时间也不是准确时间，只能说尽快执行，因为事件循环 poll 阶段的执行时间不确定，可能会堵塞进入 timer 阶段
+
+- **常见微任务**
+
+Promise.then()
+
+process.nextTick()
+
+后者比前者优先级更高，可以理解为 pn 进入了 nextTick 队列，独立于微队列
+
+```js
+setTimeout(() => {
+  console.log('timer1')
+  Promise.resolve().then(() => {
+    console.log('promise1')
+  })
+  process.nextTick(() => {
+    console.log('next tick1')
+  })
+  Promise.resolve().then(() => {
+    console.log('promise2')
+  }) 
+  process.nextTick(() => {
+    console.log('next tick2')
+  })
+})
+
+setTimeout(() => {
+  console.log('timer2')
+  Promise.resolve().then(() => {
+    console.log('promise3')
+  })
+})
+```
+
+- **setTimeout0 与 setImmediate 先后顺序不确定**
+
+但在 **io 回调**中，setImmediate 一定比 setTimeout0 **更早**，因为 io 事件处理是在 poll 阶段，紧接着就是 check 阶段，最后才是 timer 阶段
+
+### 4.3 对比
+
+机制类似，侧重不同
+
+最直观的对比就是循环的阶段比浏览器多，自然地就把宏任务也做了区分，并有了先后顺序
+
+在 Node.js 中，事件循环的实现依赖于 libuv 库，这使得 Node.js 能够处理文件系统、网络请求等 I/O 操作。Node.js 的事件循环有多个阶段，每个阶段处理特定类型的任务。例如，定时器阶段处理定时器回调，I/O 回调阶段处理 I/O 事件，微任务队列在每个宏任务完成后被清空
+
+相较之下，浏览器的事件循环主要用于处理用户界面事件，如鼠标点击和键盘输入。浏览器的事件循环也会在每个宏任务完成后清空微任务队列，但它的实现与 Node.js 不同，因为浏览器还需要**处理渲染和绘制**等任务。浏览器的事件循环通常会在每个事件循环周期中进行一次渲染，确保用户界面能够及时更新
+
+总结来说，Node.js 和浏览器的事件循环在处理异步任务的基本机制上是相似的，都是在完成一个任务后清空微任务队列。然而，它们的实现细节和处理的任务类型有所不同，**Node.js 更加专注于服务器端的 I/O 操作，而浏览器则更注重用户界面的交互和渲染。**
+
