@@ -8,6 +8,34 @@ authors: gsemir
 
 # 手写 Promise
 
+> 省流总结要点
+>
+> 1. 定义常量，防止硬编码
+>
+> 2. P 构造器接收一个函数，将 P 的 resolve 和 reject 方法传入这个函数并调用，注意 resolve 和 reject 的 this 指向
+>
+> 3. resolve 和 reject 负责改变状态并保存结果，最后执行 run 逻辑
+>
+> 4. then 方法接收两个参数 onFullfilled onRejected，返回一个 p。then 方法就是缓存四个回调，然后执行 run 逻辑
+>
+> 5. run 逻辑主要是判断 onFulfilled 和 onRejected 回调的执行时机：当大 P 状态变更时要执行对应的回调
+>
+>    根据 onFulfilled 和 onRejected 的类型及返回值，处理 p 的状态，也就是 p 的 resolve/reject 的运行时机：
+>
+>    1. 如果 callback 不是函数
+>
+>       那么这个 then 返回的 p 就以前面的 P 为准。即直接 resolve 或 reject 这个 P 的结果即可
+>
+>    2. 如果 callback 是函数
+>
+>       那么执行这个函数，返回的结果作为 p 的结果
+>
+>    3. 如果 callback 返回 Promise
+>
+>       继续调用返回的 promise.then，把 resolve 和 reject 传进去
+>
+> 6. 注意 runOne 的逻辑要放入微队列中
+
 > https://promisesaplus.com/
 > https://vitest.dev/guide/
 

@@ -6,6 +6,32 @@ date: 2023-07-11
 tags: [ruby, ruby on rails]
 ---
 
+>Why ruby
+>
+>站在程序员的角度，我可以推荐学习 Ruby 语言和 Rails 框架，主要原因如下：
+>
+>**1. 开发效率高**
+>
+>Ruby 语言语法简洁优雅，非常接近自然语言，易于阅读和编写。[3](https://dev.to/kopylov_vlad/why-i-love-ruby-44g9) Rails 框架遵循“约定优于配置”的原则，提供了丰富的工具和库，可以快速构建 Web 应用。[3](https://dev.to/kopylov_vlad/why-i-love-ruby-44g9) 有经验的 Ruby 开发者使用 Rails 框架进行开发，速度比使用其他语言和框架快 30%-40%。[3](https://dev.to/kopylov_vlad/why-i-love-ruby-44g9) 这样可以节省大量时间和精力，让我们可以专注于业务逻辑和用户体验。
+>
+>**2. 代码可读性强**
+>
+>Ruby 代码非常易读，即使对于没有 Ruby 经验的开发者来说，也很容易理解代码的意图。[3](https://dev.to/kopylov_vlad/why-i-love-ruby-44g9) 这使得团队合作和代码维护变得更加容易。
+>
+>**3. 生态系统成熟**
+>
+>Ruby 社区非常活跃，提供了大量的开源库和工具，可以帮助我们解决各种问题。[3](https://dev.to/kopylov_vlad/why-i-love-ruby-44g9) Rails 框架本身也包含了大量的功能模块，可以满足大部分 Web 应用开发的需求。
+>
+>**4. 适合快速原型开发**
+>
+>Ruby on Rails 非常适合快速构建原型，因为它可以快速实现功能，并且易于修改。[3](https://dev.to/kopylov_vlad/why-i-love-ruby-44g9) 这使得我们可以快速验证想法，并在早期阶段获得用户反馈。
+>
+>**5. 仍然有市场需求**
+>
+>虽然 Ruby 的热度比前几年有所下降，但仍然有很多公司在使用 Ruby 和 Rails 框架，并且有持续的招聘需求。[2](https://geekflare.com/learn-ruby-programming/) 特别是一些创业公司，仍然倾向于选择 Ruby on Rails 来快速构建产品。
+>
+>总而言之，学习 Ruby 和 Rails 框架对于程序员来说是一个不错的选择，它可以帮助我们提高开发效率，写出更优雅的代码，并且在工作中获得更多的机会。
+
 ## 初始化
 
 ### 环境配置

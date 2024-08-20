@@ -9,6 +9,16 @@ authors:
 tags: [sso, jwt]
 ---
 
+>JSON Web Token，既是一种**数据标准**，也是一种**登录认证方案**。
+>
+>[HEADER].[PAYLOAD].[SIGNATURE]
+>
+>Header 是一个 JSON 对象，描述 JWT 的元数据，例如加密算法或类型等
+>
+>Payload 是一个 JSON 对象，实际需要传递的数据
+>
+>Signature 是签名，使用密钥对前两部分使用加密算法进行加密后的字符串
+
 ## 定义
 
 JWT 全称 **JSON Web Token**，定义了一种在网络上安全传输以 JSON 格式包含的声明信息（数据）的标准，也指代了一种登录认证方案

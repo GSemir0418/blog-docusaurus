@@ -1,5 +1,5 @@
 ---
-title: Proxy
+title: Proxy题目
 date: 2024-03-29T14:15:00
 authors:
   name: GSemir

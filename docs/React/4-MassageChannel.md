@@ -52,6 +52,29 @@ MessageChannel API 是用来做**消息通信**的，基本使用如下
 
 React 使用 `MessageChannel` 作为一个指示器，它发送一个空消息让浏览器知道可以安排下一个任务了。当 `onmessage` 事件触发时，它真正开始执行任务。这就是所谓的异步调度，它和直接调用任务有着本质的区别：它允许浏览器有机会在发送消息和接收消息时执行其他操作，如UI渲染。
 
+以下是 React 调度器如何使用 MessageChannel API 进行调度的步骤：
+
+1. **创建 MessageChannel:** 调度器会创建一个 `MessageChannel` 实例。`MessageChannel` 包含两个端口，`port1` 和 `port2`，用于双向通信。
+2. **调度任务:** 当需要调度一个任务时，调度器会将该任务包装在一个回调函数中，并将该回调函数注册为 `port1` `message` 事件的监听器。
+3. **发送消息:** 当需要调度一个任务时，调度器会用 `port2` 发送一条**空消息**，让浏览器在合适的时间调用，从而触发 port1 的 omessage 事件，并执行之前注册的回调函数，从而执行相应的任务。
+4. **异步执行:** 由于消息传递机制是异步的，因此任务会在下一个事件循环中执行，而不是阻塞当前的执行流程。
+
+**代码示例：**
+
+```js
+const channel = new MessageChannel();
+const port = channel.port2;
+
+channel.port1.onmessage = () => {
+  // 执行任务
+};
+
+// 调度任务
+const scheduleTask = (task) => {
+  port.postMessage(null);
+};
+```
+
 ### 为什么不选择 setTimeout
 
 因为 setTimeout 在嵌套层级超过一定数量（一般是5）时，延时如果小于 4ms，那么会被强制设置为 4ms

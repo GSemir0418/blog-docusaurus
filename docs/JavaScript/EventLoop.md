@@ -259,6 +259,120 @@ console.log(9)
 1. 如果 Promise 没有（执行到） `resolve()`，那么 `then` 回调就**不会**进入微队列
 2. async 函数中 `return "xxx"` 关键字会使得这个函数返回一个立即解析为 `"xxx"` 的 `Promise`
 
+再来
+
+```js
+console.log("start");
+
+setTimeout(() => {
+  console.log("setTimeout1");
+}, 0);
+
+(async function foo() {
+  console.log("async 1");
+
+  await asyncFunction();
+
+  console.log("async2");
+
+})().then(console.log("foo.then"));
+
+async function asyncFunction() {
+  console.log("asyncFunction");
+
+  setTimeout(() => {
+    console.log("setTimeout2");
+  }, 0);
+
+  new Promise((res) => {
+    console.log("promise1");
+
+    res("promise2");
+  }).then(console.log);
+}
+
+console.log("end")
+
+```
+
+await 后面的函数调用要进去顺序执行，如果 await 结束（）了，将 await 后面的代码推入微队列
+
+```js
+// console.log('=======事件循环2=状态吸收===========================')
+// async function async1() {
+//   console.log(1)
+//   await async2()
+//   console.log('AAA')
+// }
+
+// function async2() {
+//   return Promise.resolve(2)
+// }
+
+// async1()
+
+// Promise.resolve()
+//   .then(() => {
+//     console.log(3)
+//   }).then(() => {
+//     console.log(4)
+//   }).then(() => {
+//     console.log(5)
+//   })
+// 事件循环3
+// console.log('========事件循环3=async await=====================')
+// async function asy1() {
+//   console.log(1)
+//   await asy2()
+//   console.log(2)
+// }
+
+// const asy2 = async () => {
+//   await setTimeout(() => {
+//     Promise.resolve().then(() => {
+//       console.log(3)
+//     })
+//     console.log(4)
+//   }, 0)
+// }
+
+// const asy3 = async () => {
+//   Promise.resolve().then(() => {
+//     console.log(6)
+//   })
+// }
+
+// asy1()
+// console.log(7)
+// asy3()
+
+console.log('========事件循环4=Promise=============')
+Promise.resolve()
+  .then(() => {
+    console.log(0)
+    return Promise.resolve(4)
+  })
+  .then((res) => {
+    console.log(res)
+  })
+
+Promise.resolve()
+  .then(() => {
+    console.log(1)
+  })
+  .then(() => {
+    console.log(2)
+  })
+  .then(() => {
+    console.log(3)
+  })
+  .then(() => {
+    console.log(5)
+  })
+```
+
+- 如果 then 返回了一个 Promise.resolve()，那么。。
+
 ### 3.6 async await
 
 `async` 和 `await` 是 JavaScript 中用于处理**异步编程**的**关键字**，它们使得异步代码的编写和阅读变得更加直观和简洁。

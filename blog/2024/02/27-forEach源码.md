@@ -9,6 +9,8 @@ authors:
 tags: [javascript, forEach]
 ---
 
+>提前拿到了原数组的 `len`，使用 `while(k < len)` 循环遍历，下标 k 不存在（`in`）的话就不会做处理，继续遍历
+
 ### 现象
 
 在日常开发使用 forEach 遍历对象的过程中，会出现一些奇怪的现象：

@@ -9,6 +9,38 @@ authors:
 tags: [javascript, commonjs, require]
 ---
 
+>```js
+>function require(modulePath) {
+>  // 根据传递的模块路径，得到模块完整的绝对路径作为id
+>  var moduleId = getModuleIds(modulePath)
+>  
+>  // 辅助函数
+>  function _require(exports, require, module, __filename, __dirname) {
+>    // 我们的模块代码都是在一个函数环境中执行的
+>    // 这也就解释了为什么 commonjs 能够隔离变量，不会造成全局污染
+>    
+>    // 我们在模块中可以直接使用 exports module __dirname __filename require 等属性或方法
+>    // 原因就在于他们都是这个函数的参数
+>  }
+>  
+>  // 初始化 module 对象和 exports 对象
+>  var module = {
+>    exports: {}
+>  }
+>  var exports = module.exports
+>  // 得到文件模块的绝对路径
+>  var __filename = moduleId
+>  // 得到模块所在目录的绝对路径
+>  var __dirname = getDirname(__filename)
+>  // 使用 call 执行函数，绑定上下文为 exports
+>  // 这就意味着在模块中，this === exports === module.exports
+>  __require.call(exports, exports, require, module, __filename, __dirname)
+>  
+>  // 最后返回 module.exports
+>  return module.exports
+>}
+>```
+
 整个 commonjs 的运行都依托于 require 函数的执行机制，所以研究 commonjs 的关键就在于理解 require 函数的本质
 
 #### require 函数的实现

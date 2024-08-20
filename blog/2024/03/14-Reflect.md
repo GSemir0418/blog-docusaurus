@@ -74,5 +74,5 @@ proxy.c
 
 虽然一开始调用了内部方法 `[[OwnPropertyKeys]]` 获取到了对象全部的 keys，但紧接着对于**不可枚举或 Symbol 类型**的属性进行了排除
 
-因此更严谨的获取对象全部属性名的方法就是直接调用内部方法 `Reflect.ownKeys(obj)`
+因此**更严谨**的获取对象**全部自有属性名**包括 Symbol 的方法就是直接调用内部方法 `Reflect.ownKeys(obj)`
 
