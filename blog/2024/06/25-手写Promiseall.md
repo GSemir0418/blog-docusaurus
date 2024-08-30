@@ -112,20 +112,15 @@ Promise.myAll = function (proms) {
 Promise.myRace = function (proms) {
   // 同样返回 promise
   return new Promise((resolve, reject) => {
-    let i = 0
-    for (const p of proms) {
-      i++
+    for (let i = 0; i < proms.length;  i++) {
       // 遍历，只要某个子 promise 有结果了，就作为整体 Promise 的结果 resolve 或 reject
-      Promise.resolve(p)
-        .then((result) => {
-          resolve(result)
-        })
-        .catch((err) => {
+      Promise.resolve(proms[i])
+        .then(r => {
+            resolve(r)
+        }).catch(err => {
           reject(err)
         })
     }
-    // 边界情况
-    if(i === 0) resolve([])
   })
 }
 ```
@@ -165,6 +160,37 @@ Promise.myAllSettled = function (proms) {
     }
     if (i === 0) { resolve([]) }
   })
+}
+```
+
+### Catch
+
+```js
+Promise.prototype.myCatch = function (onRejected) {
+  return this.then(undefined, onRejected)
+}
+```
+
+### Promise.resolve
+
+```js
+Promise.myResolve = function (value) { 
+  if (value instanceof Promise) { return value }
+  if (isPromiseLike(value)) {
+    return new Promise((res) => {
+      value.then(res)
+    })
+  } else {
+    return new Promise((res) => res(value))
+  }
+}
+```
+
+### Promise.reject
+
+```js
+Promise.myReject = function (reason) {
+  return new Promise((_, reject) => reject(reason))
 }
 ```
 

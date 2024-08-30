@@ -295,56 +295,59 @@ console.log("end")
 
 ```
 
-await 后面的函数调用要进去顺序执行，如果 await 结束（）了，将 await 后面的代码推入微队列
+如果 then 接收的不是回调，而是 then(console.log('xxx'))，会当成同步代码立即执行，而不是推送到微队列
+
+await 后面的函数调用要**当成同步代码继续顺序执行**，如果 await 后面的 Promise 结束了，会将 await 后面的代码推入微队列；如果后面没有代码，那就将「当前 async 函数的完成」这件事推到微队列
+
+如果 await 后面不是 Promise，会自动包装成 Promise.resolve(xxx)
 
 ```js
-// console.log('=======事件循环2=状态吸收===========================')
-// async function async1() {
-//   console.log(1)
-//   await async2()
-//   console.log('AAA')
-// }
+console.log('=======事件循环2=状态吸收===========================')
+async function async1() {
+  console.log(1)
+  await async2()
+  console.log('AAA')
+}
 
-// function async2() {
-//   return Promise.resolve(2)
-// }
+async function async2() {
+  return Promise.resolve(2)
+}
 
-// async1()
+async1()
 
-// Promise.resolve()
-//   .then(() => {
-//     console.log(3)
-//   }).then(() => {
-//     console.log(4)
-//   }).then(() => {
-//     console.log(5)
-//   })
-// 事件循环3
-// console.log('========事件循环3=async await=====================')
-// async function asy1() {
-//   console.log(1)
-//   await asy2()
-//   console.log(2)
-// }
+Promise.resolve()
+  .then(() => {
+    console.log(3)
+  }).then(() => {
+    console.log(4)
+  }).then(() => {
+    console.log(5)
+  })
 
-// const asy2 = async () => {
-//   await setTimeout(() => {
-//     Promise.resolve().then(() => {
-//       console.log(3)
-//     })
-//     console.log(4)
-//   }, 0)
-// }
+console.log('========事件循环3=async await=====================')
+async function asy1() {
+  console.log(1)
+  await asy2()
+  console.log(2)
+}
+const asy2 = async () => {
+  await setTimeout(() => {
+    Promise.resolve().then(() => {
+      console.log(3)
+    })
+    console.log(4)
+  }, 0)
+}
 
-// const asy3 = async () => {
-//   Promise.resolve().then(() => {
-//     console.log(6)
-//   })
-// }
+const asy3 = async () => {
+  Promise.resolve().then(() => {
+    console.log(6)
+  })
+}
 
-// asy1()
-// console.log(7)
-// asy3()
+asy1()
+console.log(7)
+asy3()
 
 console.log('========事件循环4=Promise=============')
 Promise.resolve()
@@ -371,7 +374,7 @@ Promise.resolve()
   })
 ```
 
-- 如果 then 返回了一个 Promise.resolve()，那么。。
+Async 函数或 then 函数如果直接返回 return Promise.resolve() 那么会出现状态吸收的现象，即将当前 async 或 then 返回的 Promise 会吸收这个状态，有准备吸收和吸收两个步骤，吸收之后这个 Promise 才算完成，后续的代码才能放入微队列中
 
 ### 3.6 async await
 

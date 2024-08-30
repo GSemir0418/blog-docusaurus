@@ -57,12 +57,6 @@ tags: [http, https, dns, tcp, websocket, cdn, cache]
 
 -----
 
-#### 如何防止DNS污染
-
-#### CookieFree 与CDN
-
------
-
 #### HTTP/1.1、HTTP/2 和 HTTPS
 
 首先 HTTP/1.1 和 HTTP/2 是属于 HTTP 协议的两个版本
@@ -194,12 +188,6 @@ ETag: "a1234"
 
 -----
 
-#### HTTPS 存在安全性问题吗？有什么办法可以解决吗？
-
-中间人代理
-
------
-
 #### WebSocket
 
 WebSocket 是一种**网络通信协议**，提供了在单个长连接上进行全双工通信的能力。它允许服务端和客户端之间建立一个**持久**的连接，并且双方可以在任何时间点开始发送数据。
@@ -223,7 +211,9 @@ WebSocket 协议在 URI 方案中以`ws`（非加密）和`wss`（加密）出�
 
 #### GET和POST的区别有哪些
 
-1. 语义上，GET是**读**，POST是**写**
+1. 语义上，GET是**读**，POST是**写**，造成两者幂等性（多次执行操作，产生的结果相同）的不同
+
+   - 所以GET是幂等的，POST不是幂等的
 
    - 所以用浏览器**打开网页**会发送GET请求（若想用POST打开网页要用form标签）
 
@@ -249,54 +239,6 @@ WebSocket 协议在 URI 方案中以`ws`（非加密）和`wss`（加密）出�
 
 -----
 
-#### 说说同源策略与跨域
-
-- 同源：如果两个 URL 的**协议**、**端口**和**域名**都完全一致的话，则这两个URL是同源的
-- 同源策略就是浏览器的一种安全措施，限制了不同源 url 之间的资源交互
-- 保证用户的隐私安全与数据安全
-- 很多情况下，前端需要访问另一个域名的后端接口，会被浏览器阻止其获取响应，即出现**跨域**问题
-
-##### JSONP
-
-通过`<script>`标签来绕过同源策略限制，因为`<script>`标签的加载不受同源策略限制。使用JSONP时，一个回调函数和数据将被返回，客户端可以在网页中直接调用这个回调函数处理数据。
-
-1. 前端定义全局函数 jsonpCallback
-2. 定义一个 script 标签，其 src 赋值为 get 请求的 url。当浏览器解析到 script 标签有 src 属性时，就会自动发起 get 请求
-3. 服务端将要返回的数据作为参数和函数名称拼接在一起作为 js 脚本代码段（`jsonpCallback({name:'abc'})`）返回，并自动执行，从而在全局函数 jsonpCallback 中可以拿到数据
-
-需要注意的是，JSONP有安全缺陷，因为它会执行返回的脚本，如果数据来源不可信，就会有脚本注入的风险。如今，更推荐使用CORS（跨源资源共享）来安全地实现跨域请求。
-
-##### CORS（跨域资源共享）
-
-服务端配置响应头
-
-```http
-Access-Control-Allow-Origin: https://甲站点
-Access-Control-Allow-Methods: POST, GET, OPTIONS
-Access-Control-Allow-Headers: Content-Type
-```
-
-- **存在一定风险**，因为添加响应头，说明**完全信任**甲站点，小公司可以，但是大公司建议用 nginx 代理，即中间层
-
-```nginx
-server {
-	listen	80;
-	server_name localhost;
-	# 我们访问的路径是同源的 localhost:80，但内容是非同源的 localhost:8888 
-  location / {
-  	root	html;
-  	index	index.html index.htm;
-  	proxy_pass	http://localhost:8888; 
-  }
-  # 访问的路径是同源的 localhost:80/api/*，但内容是非同源的 api.real.com/*
-  location /api/ {
-  	proxy_pass	http://api.real.com/;
-  }
-}
-```
-
------
-
 #### Cookie、Session、LS、SS的区别
 
 Cookies、SessionStorage和LocalStorage三者都是在浏览器中存储数据的方法，但它们在存储方式、存储大小、存储时效和安全性方面有所不同。
@@ -307,24 +249,6 @@ Cookies、SessionStorage和LocalStorage三者都是在浏览器中存储数据�
 | 存储大小 | 较小，一般为4KB左右                                          | 通常比cookies大，5MB或更多                               | 比cookies大，5MB或更多                                     |
 | 存储时效 | 可以设置**过期时间**，没有设置过期时间的会在浏览器关闭时消失 | 数据仅在**当前会话**中有效，关闭页面或标签后数据会被清除 | **没有**过期时间，数据在关闭和重新开启浏览器后依然可以使用 |
 | 安全性   | 每次http请求**都会携带**cookies向服务器发送                  | **不**随http请求发送，只在客户端使用                     | **不**随http请求发送，只在客户端使用；**且同源标签共享**   |
-
------
-
-#### XSS，CSRF
-
-##### XSS（跨站脚本攻击）
-
-一个网站允许用户输入数据并将其直接显示在网页上。如果没有对输入数据进行适当的处理，攻击者可以输入一段脚本，当其他用户查看页面时，脚本会自动执行，窃取用户的cookies（若未设置HttpOnly）、操纵DOM、发起请求或者执行其他恶意操作。
-
-比如博客网站的用户评论
-
-- 防范：封装 `escapeHtml()` 函数，将用户输入中的特殊HTML字符转义，从而阻止脚本执行；cookie 设置为 httponly，阻止 js 访问 cookie
-
-##### CSRF（跨站请求伪造）
-
-攻击者诱导已登录 A 网站的用户访问网站 B，并点击链接或提交表单到 A 网站，这个请求带上你的认证信息（比如Cookies）向 A 网站发起请求，做一些非法操作，比如改密码
-
-- 防范：设置 `SameSite Cookie` 属性，它能够限制第三方网站发起的请求中是否携带本网站的 Cookies；将服务器端生成的、对于每个用户会话都是独一无二的 `CSRF Tokens`，嵌入在表单中。因为攻击者无法知道这个Token，所以他们不能构造一个有效的请求。
 
 ------
 
